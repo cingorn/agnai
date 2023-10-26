@@ -41,6 +41,7 @@ import Slot from './shared/Slot'
 import { useEffect, useResizeObserver, useWindowSize } from './shared/hooks'
 import WizardIcon from './icons/WizardIcon'
 import Badge from './shared/Badge'
+import { soundEmitter } from './shared/Audio/playable-events'
 
 const MobileNavHeader = () => {
   const user = userStore()
@@ -274,7 +275,7 @@ const GuestNavigation: Component = () => {
   return (
     <>
       <Show when={menu.config.canAuth}>
-        <Item href="/login">
+        <Item href="/login" onClick={() => soundEmitter.emit('menu-item-clicked', 'login')}>
           <LogIn /> Login
         </Item>
       </Show>
@@ -296,7 +297,7 @@ const GuestNavigation: Component = () => {
         <Library />
 
         <MultiItem>
-          <Item href="/presets">
+          <Item href="/presets" onClick={() => soundEmitter.emit('menu-item-clicked', 'presets')}>
             <Sliders /> Presets
           </Item>
           <EndItem>
@@ -382,6 +383,7 @@ const Item: Component<{ href?: string; children: string | JSX.Element; onClick?:
           href={props.href!}
           class="flex min-h-[2.5rem] items-center justify-start gap-4 rounded-lg px-2 hover:bg-[var(--bg-700)] sm:min-h-[2.5rem]"
           onClick={() => {
+            if (props.onClick) props.onClick()
             if (menu.showMenu) settingStore.closeMenu()
           }}
         >
@@ -433,7 +435,7 @@ const ExternalLink: Component<{ href: string; newtab?: boolean; children?: any }
 const Library: Component<{}> = (props) => {
   return (
     <div class="grid w-full gap-2" style={{ 'grid-template-columns': '1fr 30px' }}>
-      <Item href="/memory">
+      <Item href="/memory" onClick={() => soundEmitter.emit('menu-item-clicked', 'library')}>
         <Book /> Library{' '}
       </Item>
     </div>
@@ -443,7 +445,10 @@ const Library: Component<{}> = (props) => {
 const CharacterLink = () => {
   return (
     <MultiItem>
-      <Item href="/character/list">
+      <Item
+        href="/character/list"
+        onClick={() => soundEmitter.emit('menu-item-clicked', 'characters')}
+      >
         <WizardIcon /> Characters
       </Item>
       <EndItem>
@@ -458,7 +463,7 @@ const CharacterLink = () => {
 const ChatLink = () => {
   return (
     <MultiItem>
-      <Item href="/chats">
+      <Item href="/chats" onClick={() => soundEmitter.emit('menu-item-clicked', 'chats')}>
         <MessageCircle fill="var(--bg-100)" /> Chats
       </Item>
       <EndItem>
@@ -486,6 +491,7 @@ const UserProfile = () => {
         <Item
           onClick={() => {
             if (menu.showMenu) settingStore.closeMenu()
+            soundEmitter.emit('menu-item-clicked', 'profile')
             userStore.modal(true)
           }}
         >
