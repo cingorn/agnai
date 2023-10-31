@@ -26,6 +26,7 @@ const TextInput: Component<{
   parentClass?: string
   tokenCount?: boolean | ((count: number) => void)
   step?: number
+  readonly?: boolean
   ref?: (ref: any) => void
 
   onKeyUp?: (
@@ -170,6 +171,7 @@ const TextInput: Component<{
             name={props.fieldName}
             type={props.type || 'text'}
             required={props.required}
+            readOnly={props.readonly}
             placeholder={placeholder()}
             value={value()}
             class={'form-field focusable-field w-full rounded-xl px-4 py-2 ' + (props.class || '')}
@@ -194,6 +196,7 @@ const TextInput: Component<{
           name={props.fieldName}
           ref={onRef}
           required={props.required}
+          readOnly={props.readonly}
           placeholder={placeholder()}
           value={value()}
           class={
